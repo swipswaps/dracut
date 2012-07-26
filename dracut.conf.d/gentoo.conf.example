@@ -1,6 +1,8 @@
 # /etc/dracut.conf.d/gentoo.conf
 # Dracut config file customized for Gentoo Base System release 1
 
+udevdir=/lib/udev
+
 #
 # Modules
 #
