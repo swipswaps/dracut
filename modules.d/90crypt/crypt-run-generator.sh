@@ -12,7 +12,10 @@ if [ -f /etc/crypttab ]; then
 fi
 
 echo "$luks $dev" >> /etc/crypttab
-/lib/systemd/system-generators/systemd-cryptsetup-generator
-systemctl daemon-reload
-systemctl start cryptsetup.target
+if [ -x /lib/systemd/system-generators/systemd-cryptsetup-generator ] &&
+        command -v systemctl >/dev/null; then
+    /lib/systemd/system-generators/systemd-cryptsetup-generator
+    systemctl daemon-reload
+    systemctl start cryptsetup.target
+fi
 exit 0
