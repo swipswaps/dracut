@@ -1,7 +1,8 @@
 # /etc/dracut.conf.d/gentoo.conf
 # dracut config file customized for Gentoo Base System release 2
 
-udevdir=/lib/udev
+udevdir=
+udevaltdirs="/lib/udev /usr/lib/udev"
 ro_mnt=yes
 
 #
