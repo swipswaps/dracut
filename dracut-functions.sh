@@ -873,6 +873,16 @@ inst_rules() {
     inst_dir "$_target"
     for _rule in "$@"; do
         if [ "${_rule#/}" = "$_rule" ]; then
+            for r in ${udevaltdirs}; do
+                [[ "$r" = "${udevdir}" ]] && continue
+                if [[ -e $r/rules.d/$_rule ]]; then
+                    _found="$r/rules.d/$_rule"
+                    inst_rule_programs "$_found"
+                    inst_rule_group_owner "$_found"
+                    inst_rule_initqueue "$_found"
+                    inst_simple "$_found" "${udevdir}/rules.d/${_found##*/}"
+                fi
+            done
             for r in ${udevdir}/rules.d ${hostonly:+/etc/udev/rules.d}; do
                 if [[ -e $r/$_rule ]]; then
                     _found="$r/$_rule"
