@@ -103,6 +103,9 @@ install: dracut-version.sh
 	mkdir -p $(DESTDIR)$(pkglibdir)/modules.d
 	mkdir -p $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man5 $(DESTDIR)$(mandir)/man7 $(DESTDIR)$(mandir)/man8
 	install -m 0755 dracut.sh $(DESTDIR)$(bindir)/dracut
+	sed -r \
+		-e "s|^(pkglibdir)=.*|\1=$(pkglibdir)|" \
+		-i $(DESTDIR)$(bindir)/dracut
 	install -m 0755 dracut-catimages.sh $(DESTDIR)$(bindir)/dracut-catimages
 	install -m 0755 mkinitrd-dracut.sh $(DESTDIR)$(bindir)/mkinitrd
 	install -m 0755 lsinitrd.sh $(DESTDIR)$(bindir)/lsinitrd
