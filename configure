@@ -59,6 +59,7 @@ sbindir ?= ${sbindir:-${prefix}/sbin}
 mandir ?= ${mandir:-${prefix}/share/man}
 enable_documentation ?= ${enable_documentation:-yes}
 bindir ?= ${bindir:-${prefix}/bin}
+libexecdir ?= ${libexecdir:-${prefix}/libexec}
 EOF
 
 {

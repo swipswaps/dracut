@@ -25,6 +25,7 @@
 dracut_args=( "$@" )
 
 # base dirs
+libexecdir=/usr/libexec
 pkglibdir=/usr/lib/dracut
 dracutbasedir="$pkglibdir"
 
