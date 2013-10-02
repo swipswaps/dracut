@@ -24,10 +24,13 @@
 # store for logging
 dracut_args=( "$@" )
 
+# base dirs
+pkglibdir=/usr/lib/dracut
+dracutbasedir="$pkglibdir"
+
 set -o pipefail
 
 usage() {
-    [[ $dracutbasedir ]] || dracutbasedir=/usr/lib/dracut
     if [[ -f $dracutbasedir/dracut-version.sh ]]; then
         . $dracutbasedir/dracut-version.sh
     fi
@@ -52,7 +55,6 @@ EOF
 }
 
 long_usage() {
-    [[ $dracutbasedir ]] || dracutbasedir=/usr/lib/dracut
     if [[ -f $dracutbasedir/dracut-version.sh ]]; then
         . $dracutbasedir/dracut-version.sh
     fi
@@ -666,8 +668,6 @@ export DRACUT_LOG_LEVEL=warning
     debug=yes
 }
 
-[[ $dracutbasedir ]] || dracutbasedir=/usr/lib/dracut
-
 # if we were not passed a config file, try the default one
 if [[ ! -f $conffile ]]; then
     if [[ $allowlocal ]]; then
@@ -808,7 +808,6 @@ stdloglvl=$((stdloglvl + verbosity_mod_l))
 [[ $use_fstab_l ]] && use_fstab=$use_fstab_l
 [[ $mdadmconf_l ]] && mdadmconf=$mdadmconf_l
 [[ $lvmconf_l ]] && lvmconf=$lvmconf_l
-[[ $dracutbasedir ]] || dracutbasedir=/usr/lib/dracut
 [[ $fw_dir ]] || fw_dir="/lib/firmware/updates /lib/firmware"
 [[ $tmpdir_l ]] && tmpdir="$tmpdir_l"
 [[ $tmpdir ]] || tmpdir=/var/tmp
