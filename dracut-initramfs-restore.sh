@@ -8,8 +8,8 @@ set -e
 
 KERNEL_VERSION="$(uname -r)"
 
-[[ $dracutbasedir ]] || dracutbasedir=/usr/lib/dracut
-SKIP="$dracutbasedir/skipcpio"
+[[ $dracutlibexecdir ]] || dracutlibexecdir=/usr/libexec/dracut
+SKIP="$dracutlibexecdir/skipcpio"
 [[ -x $SKIP ]] || SKIP=cat
 
 [[ -f /etc/machine-id ]] && read MACHINE_ID < /etc/machine-id

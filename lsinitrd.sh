@@ -33,7 +33,7 @@ usage()
 }
 
 
-[[ $dracutbasedir ]] || dracutbasedir=/usr/lib/dracut
+[[ $dracutlibexecdir ]] || dracutlibexecdir=/usr/libexec/dracut
 
 sorted=0
 modules=0
@@ -158,7 +158,7 @@ case $bin in
                 echo "Early CPIO image"
                 list_files
             fi
-            SKIP="$dracutbasedir/skipcpio"
+            SKIP="$dracutlibexecdir/skipcpio"
             if ! [[ -x $SKIP ]]; then
                 echo
                 echo "'$SKIP' not found, cannot display remaining contents!" >&2
