@@ -92,6 +92,7 @@ install: dracut-version.sh
 	mkdir -p $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man5 $(DESTDIR)$(mandir)/man7 $(DESTDIR)$(mandir)/man8
 	install -m 0755 dracut.sh $(DESTDIR)$(bindir)/dracut
 	sed -r \
+		-e "s|^(libexecdir)=.*|\1=$(libexecdir)|" \
 		-e "s|^(pkglibdir)=.*|\1=$(pkglibdir)|" \
 		-i $(DESTDIR)$(bindir)/dracut
 	install -m 0755 dracut-catimages.sh $(DESTDIR)$(bindir)/dracut-catimages
@@ -135,7 +136,8 @@ endif
 		done \
 	fi
 	if [ -f install/dracut-install ]; then \
-		install -m 0755 install/dracut-install $(DESTDIR)$(pkglibdir)/dracut-install; \
+		mkdir -p $(DESTDIR)$(libexecdir); \
+		install -m 0755 install/dracut-install $(DESTDIR)$(libexecdir)/dracut-install; \
 	fi
 	mkdir -p $(DESTDIR)${prefix}/lib/kernel/install.d
 	install -m 0755 50-dracut.install $(DESTDIR)${prefix}/lib/kernel/install.d/50-dracut.install
