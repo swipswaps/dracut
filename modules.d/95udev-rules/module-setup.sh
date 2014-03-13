@@ -2,6 +2,46 @@
 # -*- mode: shell-script; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
 # ex: ts=8 sw=4 sts=4 et filetype=sh
 
+find_udevd_binary() {
+    local _bin _dir
+    local _locations=(
+        ${systemdutildir} ${udevdir} /sbin /usr/sbin
+        )
+
+    for _dir in $libdirs; do
+        _locations+=( $_dir/systemd )
+    done
+
+    for _dir in "${_locations[@]}"; do
+        for _bin in "$_dir"/{systemd-,}udevd; do
+            echo "=>>> is udevd in $_bin?" >&2
+            if [[ -x $_bin ]]; then
+                echo "$_bin"
+                return 0
+            fi
+        done
+    done
+
+    return 1
+}
+
+install_udevd_binary() {
+    local _udevd=$(find_udevd_binary)
+
+    if ! [[ $_udevd ]]; then
+        derror "Cannot find [systemd-]udevd binary!"
+        return 1
+    fi
+
+    [ -d ${initdir}/$systemdutildir ] || mkdir -p ${initdir}/$systemdutildir
+    inst "$_udevd" || return 1
+    if ! [[ -f  ${initdir}${systemdutildir}/systemd-udevd ]]; then
+        ln -fs "$_udevd" ${initdir}${systemdutildir}/systemd-udevd || return 1
+    fi
+
+    return 0
+}
+
 # called by dracut
 install() {
     local _i
@@ -12,20 +52,7 @@ install() {
     inst_multiple udevadm cat uname blkid \
         /etc/udev/udev.conf
 
-    [ -d ${initdir}/$systemdutildir ] || mkdir -p ${initdir}/$systemdutildir
-    for _i in ${systemdutildir}/systemd-udevd ${udevdir}/udevd /sbin/udevd; do
-        [ -x "$_i" ] || continue
-        inst "$_i"
-
-        if ! [[ -f  ${initdir}${systemdutildir}/systemd-udevd ]]; then
-            ln -fs "$_i" ${initdir}${systemdutildir}/systemd-udevd
-        fi
-        break
-    done
-    if ! [[ -e ${initdir}${systemdutildir}/systemd-udevd ]]; then
-        derror "Cannot find [systemd-]udevd binary!"
-        exit 1
-    fi
+    install_udevd_binary || exit 1
 
     inst_rules 50-udev-default.rules 60-persistent-storage.rules \
         61-persistent-storage-edd.rules 80-drivers.rules 95-udev-late.rules \
