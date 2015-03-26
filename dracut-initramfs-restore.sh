@@ -14,6 +14,18 @@ SKIP="$dracutbasedir/skipcpio"
 
 [[ -f /etc/machine-id ]] && read MACHINE_ID < /etc/machine-id
 
+if grep -q "/boot" /etc/fstab; then
+    if ! grep -q "/boot " /proc/mounts; then
+        mount /boot
+    fi
+fi
+
+if egrep -q "^[^#]+/boot" /etc/fstab; then
+    if ! grep -q "/boot " /proc/mounts; then
+        mount /boot
+    fi
+fi
+
 if [[ $MACHINE_ID ]] && [[ -d /boot/${MACHINE_ID} || -L /boot/${MACHINE_ID} ]] ; then
     IMG="/boot/${MACHINE_ID}/${KERNEL_VERSION}/initrd"
 fi
